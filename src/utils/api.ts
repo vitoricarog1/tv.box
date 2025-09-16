@@ -1,51 +1,46 @@
-import axios from 'axios';
-import toast from 'react-hot-toast';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://172.16.88.14:3001/api/v1';
-
-// Create axios instance
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
+{
+  "name": "tvbox-control-system",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sistema de Controle TVBOX - Controle remoto de dispositivos",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
-});
-
-// Request interceptor to add auth token
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+  "dependencies": {
+    "@tanstack/react-query": "^5.87.4",
+    "axios": "^1.12.1",
+    "idb": "^8.0.0",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "workbox-window": "^7.0.0",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.9.0",
+    "react-sortable-hoc": "^2.0.0"
   },
-  (error) => {
-    return Promise.reject(error);
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2",
+    "vite-plugin-pwa": "^0.17.4",
+    "workbox-build": "^7.0.0",
+    "workbox-precaching": "^7.0.0",
+    "workbox-routing": "^7.0.0",
+    "workbox-strategies": "^7.0.0"
   }
-);
-
-// Response interceptor to handle errors
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/admin/login';
-    }
-    
-    // Don't show toast for 401 and 404 errors
-    if (error.response?.status !== 401 && error.response?.status !== 404) {
-      const message = error.response?.data?.message || 'Erro na requisição';
-      toast.error(message);
-    }
-    
-    return Promise.reject(error);
-  }
-);
-
-export default api;
+}

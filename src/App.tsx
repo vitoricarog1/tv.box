@@ -1,81 +1,68 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './contexts/AuthContext';
-
-// Admin Pages
-import AdminLayout from './components/admin/AdminLayout';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLogin from './pages/admin/AdminLogin';
-import DevicesPage from './pages/admin/DevicesPage';
-import ContentPage from './pages/admin/ContentPage';
-import PlaylistsPage from './pages/admin/PlaylistsPage';
-import CampaignsPage from './pages/admin/CampaignsPage';
-import AnalyticsPage from './pages/admin/AnalyticsPage';
-import SettingsPage from './pages/admin/SettingsPage';
-
-// TV Box Pages
-import TVBoxDisplay from './pages/tvbox/TVBoxDisplay';
-import TVBoxSetup from './pages/tvbox/TVBoxSetup';
-
-// Components
-import ProtectedRoute from './components/ProtectedRoute';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
+{
+  "name": "tvbox-control-system",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sistema de Controle TVBOX - Controle remoto de dispositivos",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
-});
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router>
-            <div className="min-h-screen bg-gray-50">
-              <Routes>
-                {/* Admin Routes - Login disabled for now */}
-                {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<Navigate to="/admin/dashboard" replace />} />
-                  <Route path="dashboard" element={<AdminDashboard />} />
-                  <Route path="devices" element={<DevicesPage />} />
-                  <Route path="content" element={<ContentPage />} />
-                  <Route path="playlists" element={<PlaylistsPage />} />
-                  <Route path="campaigns" element={<CampaignsPage />} />
-                  <Route path="analytics" element={<AnalyticsPage />} />
-                  <Route path="settings" element={<SettingsPage />} />
-                </Route>
-
-                {/* TV Box Routes */}
-                <Route path="/tvbox/setup" element={<TVBoxSetup />} />
-                <Route path="/tvbox/:deviceId" element={<TVBoxDisplay />} />
-                <Route path="/tvbox" element={<TVBoxDisplay />} />
-
-                {/* Default redirect */}
-                <Route path="/" element={<Navigate to="/admin" replace />} />
-                <Route path="*" element={<Navigate to="/admin" replace />} />
-              </Routes>
-            </div>
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#363636',
-                  color: '#fff',
-                },
-              }}
-            />
-        </Router>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
+    "@tanstack/react-query": "^5.87.4",
+    "axios": "^1.12.1",
+    "idb": "^8.0.0",
+    "idb": "^8.0.0",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+// Main Components
+import DeviceApp from './pages/DeviceApp';
+import AdminApp from './pages/AdminApp';
+import ClientApp from './pages/ClientApp';
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2",
+    "vite-plugin-pwa": "^0.17.4",
+    "workbox-build": "^7.0.0",
+    "workbox-precaching": "^7.0.0",
+    "workbox-routing": "^7.0.0",
+    "workbox-strategies": "^7.0.0"
+  }
 }
 
-export default App;
+      <Router>
+        <Routes>
+          {/* Device/Player Routes */}
+          <Route path="/" element={<DeviceApp />} />
+          <Route path="/device" element={<DeviceApp />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin/*" element={<AdminApp />} />
+          
+          {/* Client Routes */}
+          <Route path="/client/:deviceId" element={<ClientApp />} />
+          
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+          }}
+        />
+      </Router>
